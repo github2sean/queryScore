@@ -1,4 +1,0 @@
-class Students:
-  bmh=''
-  zkzh=''
-  
