@@ -1,3 +1,11 @@
+'''
+Author: sean seanzq0331@163.com
+Date: 2024-06-25 12:08:07
+LastEditors: sean seanzq0331@163.com
+LastEditTime: 2024-06-27 23:15:52
+FilePath: /queryScore/Students.py
+Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+'''
 class Students:
   bmh=''
   zkzh=''
@@ -17,6 +25,7 @@ class Students:
   tyyjk=0
   fjf=0
   zf=0
+  lqyx=''
 
   def __init__(self):
     self.zf=self.yw+self.sx+self.yy+self.wl+self.hx+self.sw+self.ddyfz+self.ls+self.dl+self.tyyjk+self.fjf
@@ -33,7 +42,7 @@ class Students:
     return f'Students(class_num:{self.class_num},xm:{self.xm},bmh:{self.bmh},zkzh:{self.zkzh},sfzh:{self.sfzh})'
   
   def keys(self):
-    return ('class_num','xm','bmh','zkzh','sfzh','yw','sx','yy','wl','hx','sw','ddyfz','ls','dl','tyyjk','fjf','zf')
+    return ('bmh','zkzh','sfzh','class_num','xm','yw','sx','yy','wl','hx','sw','ddyfz','ls','dl','tyyjk','fjf','zf','lqyx')
   
   def __getitem__(self,item):
     return getattr(self,item)

@@ -2,7 +2,7 @@
 Author: sean seanzq0331@163.com
 Date: 2024-06-25 12:08:07
 LastEditors: sean seanzq0331@163.com
-LastEditTime: 2024-06-26 19:33:06
+LastEditTime: 2024-06-27 23:19:07
 FilePath: /queryScore/query.py
 Description: 查询中考成绩
 '''
@@ -14,7 +14,6 @@ import requests
 import datetime
 import os
 import ddddocr
-from PIL import Image
 import json
 import openpyxl
 from Students import Students
@@ -35,7 +34,7 @@ print(f'cookies:{cookies}')
 queryInterface = 'query.do'
 verifyInterface= 'verifyCode.do'
 current_dir = os.path.dirname(os.path.abspath(__file__))
-sheetPath = '中考成绩查询.xlsx'
+sheetPath = '2024届中考成绩统计表.xlsx'
 
 
 def gen_code(img):
@@ -84,20 +83,20 @@ maxcol=sheet.max_column #最大列
 #按行读取
 stu_list = []
 for i in range(minrow,maxrow+1):
-	if i>1:
+	if i>2:
 		stu = Students()
 		for j in range(mincol,maxcol+1):
 					cell=str(sheet.cell(i,j).value)
 					# print(cell,end=" ")
-					if(j==1):
+					if(j==5):
 						stu.class_num=cell.strip()
-					elif(j==2):
-						stu.xm=cell.strip()
-					elif(j==3):
-						stu.bmh=cell.strip()
 					elif(j==4):
+						stu.xm=cell.strip()
+					elif(j==1):
+						stu.bmh=cell.strip()
+					elif(j==2):
 						stu.zkzh=cell.strip()
-					elif(j==5):
+					elif(j==3):
 						stu.sfzh=cell.strip()
 					else:
 						continue
@@ -114,7 +113,7 @@ def query_score(stu):
   os.remove(name)
   queryParams = {'bmh':stu.bmh,'zkzh':stu.zkzh,'sfzh':stu.sfzh,'verify':code}
   res = requests.post(host+queryInterface,data=queryParams,headers=headers,cookies=cookies)
-  sleep(.5)
+  # sleep(.1)
   return json.loads(res.text)
 
 
@@ -131,6 +130,12 @@ def clone_data(stu,jsonRes):
 	stu.ddyfz=int(jsonData['ddyfz'])
 	stu.fjf=int(jsonData['fjf'])
 	stu.tyyjk=int(jsonData['tyyjk'])
+	if('lqyx' in jsonData.keys()):
+		lqyx = jsonData['lqyx']
+		stu.lqyx=lqyx
+		print(f'录取意向:{lqyx},stu:{stu}')
+	else:
+		stu.lqyx='暂未查到'
 	stu.zf=stu.yw+stu.sx+stu.yy+stu.wl+stu.hx+stu.sw+stu.ddyfz+stu.ls+stu.dl+stu.tyyjk+stu.fjf
 
 
@@ -163,7 +168,7 @@ while(len(error_stu)>0):
     
 		
 
-sheetTitle = ['班级','姓名','报名号','准考证号','身份证号','语文','数学','英语','物理','化学','生物','道德与法治','历史','地理','体育与健康','加分','总分']
+sheetTitle = ['报名号','准考证号','身份证号','班级','姓名','语文','数学','英语','物理','化学','生物','道德与法治','历史','地理','体育与健康','加分','总分','学生去向']
 result = openpyxl.Workbook()
 sheet_result = result.active
 sheet_result.append(sheetTitle)
